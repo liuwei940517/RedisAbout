@@ -1,0 +1,29 @@
+spring:
+  redis: #用于缓存
+    database: 0
+    host: localhost
+    port: 6379
+    jedis:
+      pool:
+        min-idle: 8
+        max-active: 1000
+        max-wait: 2000
+  datasource:
+    hikari:
+      jdbc-url: jdbc:mysql://localhost:3306/redis?serverTimezone=GMT%2B8
+      username: root
+      password: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      read-only: true #连接只读数据库时配置为true， 保证安全
+      connection-timeout: 60000 #等待连接池分配连接的最大时长（毫秒）
+      idle-timeout: 600000 #一个连接idle状态的最大时长（毫秒），超时则被释放（retired）
+      max-lifetime: 1800000  #个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒，参考MySQL wait_timeout参数 show variables like '%timeout%'
+      maximum-pool-size: 10  #连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count)
+      minimum-idle: 3 #池中维护的最小空闲连接数
+      connection-test-query: "SELECT 'ZTM' FROM DUAL"
+      validation-timeout: 3000
+      login-timeout: 5
+logging:
+  file: redis.log
+  level:
+    com.example.redis.dao: debug
